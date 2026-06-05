@@ -1,0 +1,9 @@
+from enum import StrEnum
+
+
+class RoutineGoal(StrEnum):
+    WEIGHT_LOSS = "WEIGHT_LOSS"
+    MUSCLE_GROWTH = "MUSCLE_GROWTH"
+    STRENGTH = "STRENGTH"
+    ENDURANCE = "ENDURANCE"
+    FLEXIBILITY = "FLEXIBILITY"

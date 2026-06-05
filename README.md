@@ -11,3 +11,9 @@ docker compose up --build
 - Client: http://localhost:5173
 - Server: http://localhost:8000
 - Postgres: localhost:5432
+
+## About
+
+### Client
+
+I took the color scheme from here: https://dribbble.com/shots/26262162-Titan-Fitness-Color-Palette
