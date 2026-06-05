@@ -1,0 +1,1 @@
+export { DeadliftIcon } from './deadlift'
