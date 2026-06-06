@@ -1,7 +1,8 @@
-from sqlalchemy import ForeignKey, Integer, Text
+from sqlalchemy import Enum, ForeignKey, Integer, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from core.database import Base
+from models.workouts.session_exercise_status import SessionExerciseStatus
 
 
 class SessionExercise(Base):
@@ -18,6 +19,11 @@ class SessionExercise(Base):
         index=True,
     )
     exercise_order: Mapped[int] = mapped_column(Integer)
+    status: Mapped[SessionExerciseStatus] = mapped_column(
+        Enum(SessionExerciseStatus, name="session_exercise_status"),
+        default=SessionExerciseStatus.PARTIAL,
+        server_default=SessionExerciseStatus.PARTIAL.value,
+    )
     notes: Mapped[str | None] = mapped_column(Text)
 
     workout_session: Mapped["WorkoutSession"] = relationship(back_populates="session_exercises")

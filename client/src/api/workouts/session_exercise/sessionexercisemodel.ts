@@ -23,6 +23,10 @@ export class SessionExerciseModel {
     return this.payload.exercise_order
   }
 
+  get status() {
+    return this.payload.status
+  }
+
   toJSON() {
     return this.payload
   }

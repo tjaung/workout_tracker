@@ -17,3 +17,7 @@ docker compose up --build
 ### Client
 
 I took the color scheme from here: https://dribbble.com/shots/26262162-Titan-Fitness-Color-Palette
+
+### ERD
+
+![erd](erd.png)
