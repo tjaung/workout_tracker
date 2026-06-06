@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { sessionExerciseStatusSchema } from '@api/workouts/session_exercise_status'
 
 export const sessionExerciseSchema = z.object({
   session_exercise_id: z.number(),
@@ -6,6 +7,7 @@ export const sessionExerciseSchema = z.object({
   exercise_id: z.number(),
   source_split_exercise_id: z.number().nullable().optional(),
   exercise_order: z.number(),
+  status: sessionExerciseStatusSchema,
   notes: z.string().max(500).nullable().optional(),
 })
 
