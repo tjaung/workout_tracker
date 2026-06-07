@@ -1,0 +1,66 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  server:
+    name: Server
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+          cache-dependency-path: server/requirements.txt
+
+      - name: Install server dependencies
+        working-directory: server
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install flake8
+
+      - name: Lint server
+        working-directory: server
+        run: flake8 app core exceptions models schemas services main.py
+
+      - name: Compile server
+        working-directory: server
+        run: python -m compileall app core exceptions models schemas services main.py
+
+      - name: Import API router
+        working-directory: server
+        run: python -c "from app.api.v1.api import api_router; print(len(api_router.routes))"
+
+  client:
+    name: Client
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Set up pnpm
+        run: corepack enable
+
+      - name: Install client dependencies
+        working-directory: client
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint client
+        working-directory: client
+        run: pnpm lint
+
+      - name: Build client
+        working-directory: client
+        run: pnpm build
