@@ -6,6 +6,8 @@ export const userSchema = z.object({
   email: z.string().min(1).max(255),
   first_name: z.string().min(1).max(100),
   last_name: z.string().min(1).max(100),
+  sex: z.enum(['female', 'male']),
+  date_of_birth: z.string(),
   created_at: z.string(),
   last_login: z.string().nullable().optional(),
 })
@@ -16,6 +18,8 @@ export const userCreateSchema = userSchema
     email: true,
     first_name: true,
     last_name: true,
+    sex: true,
+    date_of_birth: true,
   })
   .extend({
     password: z.string().min(8).max(255),

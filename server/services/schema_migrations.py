@@ -23,9 +23,15 @@ BODY_MEASUREMENT_METADATA_COLUMNS = {
     "is_current": "BOOLEAN DEFAULT FALSE",
 }
 
+USER_METADATA_COLUMNS = {
+    "sex": "VARCHAR(20) DEFAULT 'male' NOT NULL",
+    "date_of_birth": "DATE DEFAULT '1990-01-01' NOT NULL",
+}
+
 
 def ensure_runtime_schema() -> None:
     inspector = inspect(engine)
+    _ensure_columns(inspector, "users", USER_METADATA_COLUMNS)
     _ensure_columns(inspector, "routines", ROUTINE_METADATA_COLUMNS)
     _ensure_columns(inspector, "routine_splits", ROUTINE_SPLIT_METADATA_COLUMNS)
     _ensure_columns(inspector, "session_exercises", SESSION_EXERCISE_METADATA_COLUMNS)

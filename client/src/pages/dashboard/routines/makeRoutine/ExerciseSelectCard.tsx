@@ -1,6 +1,7 @@
 import type { ExerciseModel } from '@api/exercises/exercise'
 import { Accordion } from '@components/ui/accordion'
 import { Card, CardContent } from '@components/ui/card'
+import { DetailBlock } from '@components/ui/detail-block'
 
 export function ExerciseSelectCard({
   exercise,
@@ -50,16 +51,5 @@ export function ExerciseSelectCard({
         </div>
       </Accordion>
     </Card>
-  )
-}
-
-function DetailBlock({ label, value }: { label: string; value: string | null | undefined }) {
-  return (
-    <div>
-      <h3 className="text-xs font-semibold uppercase tracking-[0.14em] text-tertiary">
-        {label}
-      </h3>
-      <p className="mt-1 leading-6">{value?.trim() || 'No details available.'}</p>
-    </div>
   )
 }

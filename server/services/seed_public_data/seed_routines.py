@@ -62,6 +62,24 @@ class RoutineSeedStats:
 
 CARDIO_EXERCISES = [
     (
+        "Walk",
+        "Body Weight",
+        "Walk at an easy pace for low-impact aerobic work.",
+        "Keep posture tall, arms relaxed, and steps smooth.",
+    ),
+    (
+        "Jog",
+        "Body Weight",
+        "Jog at a light pace that can be sustained for several minutes.",
+        "Keep cadence comfortable and breathing controlled.",
+    ),
+    (
+        "Run",
+        "Body Weight",
+        "Run at a steady training pace or structured workout effort.",
+        "Stay relaxed through the shoulders and maintain consistent rhythm.",
+    ),
+    (
         "Brisk Walk",
         "Body Weight",
         "Walk at a pace that raises breathing while staying conversational.",
@@ -240,6 +258,7 @@ def _seed_public_routines(db: Session) -> RoutineSeedStats:
             ExerciseRef(name=name, equipment=equipment, exercise_type=ExerciseType.CARDIO),
             preparation=preparation,
             execution=execution,
+            exact_only=True,
         )
         if created:
             stats = _replace_stats(stats, exercises_created=stats.exercises_created + 1)
@@ -316,10 +335,11 @@ def _get_or_create_exercise(
     db: Session,
     exercise_ref: ExerciseRef,
     *,
+    exact_only: bool = False,
     preparation: str | None = None,
     execution: str | None = None,
 ) -> tuple[Exercise, bool]:
-    exercise = _find_exercise(db, exercise_ref)
+    exercise = _find_exercise(db, exercise_ref, exact_only=exact_only)
     if exercise is not None:
         return exercise, False
 
@@ -337,7 +357,7 @@ def _get_or_create_exercise(
     return exercise, True
 
 
-def _find_exercise(db: Session, exercise_ref: ExerciseRef) -> Exercise | None:
+def _find_exercise(db: Session, exercise_ref: ExerciseRef, *, exact_only: bool = False) -> Exercise | None:
     query = db.query(Exercise).filter(Exercise.name == exercise_ref.name)
     if exercise_ref.equipment is not None:
         query = query.filter(Exercise.equipment == exercise_ref.equipment)
@@ -346,6 +366,8 @@ def _find_exercise(db: Session, exercise_ref: ExerciseRef) -> Exercise | None:
     exercise = query.filter(Exercise.is_global.is_(True)).first()
     if exercise is not None:
         return exercise
+    if exact_only:
+        return None
 
     fallback_query = db.query(Exercise).filter(Exercise.name.ilike(f"%{exercise_ref.name}%"))
     if exercise_ref.equipment is not None:

@@ -28,6 +28,14 @@ export class UserModel {
     return this.payload.last_name
   }
 
+  get sex() {
+    return this.payload.sex
+  }
+
+  get dateOfBirth() {
+    return this.payload.date_of_birth
+  }
+
   get displayName() {
     return `${this.firstName} ${this.lastName}`
   }

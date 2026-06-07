@@ -1,3 +1,5 @@
+from datetime import date
+
 from sqlalchemy.orm import Session
 
 from core.auth import hash_password
@@ -42,6 +44,8 @@ def _seed_default_user(db: Session) -> User:
             email=DEFAULT_USER_EMAIL,
             username=DEFAULT_USER_USERNAME,
             password_hash=hash_password(DEFAULT_USER_PASSWORD),
+            sex="male",
+            date_of_birth=date(1990, 1, 1),
         )
         db.add(user)
         db.flush()
@@ -52,6 +56,8 @@ def _seed_default_user(db: Session) -> User:
     user.email = DEFAULT_USER_EMAIL
     user.username = DEFAULT_USER_USERNAME
     user.password_hash = hash_password(DEFAULT_USER_PASSWORD)
+    user.sex = "male"
+    user.date_of_birth = date(1990, 1, 1)
     db.add(user)
     db.flush()
     return user

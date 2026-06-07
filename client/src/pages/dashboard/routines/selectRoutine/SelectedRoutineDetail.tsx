@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { routineDetailApi, type RoutineDetailModel } from '@api/programming/routine'
 import { BackButton } from '@components/ui/back-button'
+import { Badge } from '@components/ui/badge'
 import { Button } from '@components/ui/button'
 import { Card, CardContent } from '@components/ui/card'
 import { useModal } from '@hooks/modal/useModal'
@@ -47,10 +48,10 @@ export function SelectedRoutineDetail({
       <Card>
         <CardContent className="p-5">
           <div className="flex flex-wrap gap-2 text-xs font-medium text-muted">
-            <InfoPill>{routine.displayRoutineType}</InfoPill>
-            <InfoPill>{routine.displayGoal}</InfoPill>
-            <InfoPill>{routine.displayDaysPerWeek}</InfoPill>
-            <InfoPill>{routine.displayIntensity}</InfoPill>
+            <Badge>{routine.displayRoutineType}</Badge>
+            <Badge>{routine.displayGoal}</Badge>
+            <Badge>{routine.displayDaysPerWeek}</Badge>
+            <Badge>{routine.displayIntensity}</Badge>
           </div>
 
           <section className="mt-6">
@@ -147,13 +148,5 @@ function StartRoutineModalContent({
         </Button>
       </div>
     </div>
-  )
-}
-
-function InfoPill({ children }: { children: string }) {
-  return (
-    <span className="rounded-md border border-border bg-alabaster-grey px-2 py-1">
-      {children}
-    </span>
   )
 }

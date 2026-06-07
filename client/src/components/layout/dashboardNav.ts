@@ -1,10 +1,10 @@
 import {
-  Activity,
   CalendarDays,
   Dumbbell,
   Home,
   LineChart,
   Settings,
+  Trophy,
   type LucideIcon,
 } from 'lucide-react'
 
@@ -37,7 +37,7 @@ export const dashboardNavItems: DashboardNavItem[] = [
   },
   {
     href: '/dashboard/records',
-    icon: Activity,
+    icon: Trophy,
     label: 'Records',
   },
   {

@@ -13,6 +13,8 @@ from app.api.v1.endpoints.programming import (
     split_exercise_router,
     split_router,
 )
+from app.api.v1.endpoints.progress import router as progress_router
+from app.api.v1.endpoints.records import router as records_router
 from app.api.v1.endpoints.users import body_measurement_router, user_router, user_settings_router
 from app.api.v1.endpoints.workouts import (
     exercise_set_router,
@@ -35,6 +37,8 @@ api_router.include_router(routine_router)
 api_router.include_router(split_router)
 api_router.include_router(routine_split_router)
 api_router.include_router(split_exercise_router)
+api_router.include_router(progress_router)
+api_router.include_router(records_router)
 api_router.include_router(workout_session_router)
 api_router.include_router(session_exercise_router)
 api_router.include_router(exercise_set_router)

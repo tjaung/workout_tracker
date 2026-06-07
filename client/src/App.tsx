@@ -2,7 +2,8 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { DashboardLayout } from '@components/layout/DashboardLayout'
 import { AuthPage } from '@pages/auth/AuthPage'
 import { DashboardPage } from '@pages/dashboard/DashboardPage'
-import { DashboardPlaceholderPage } from '@pages/dashboard/DashboardPlaceholderPage'
+import { ProgressPage } from '@pages/dashboard/progress/ProgressPage'
+import { RecordsPage } from '@pages/dashboard/records/RecordsPage'
 import { AddRoutinePage } from '@pages/dashboard/routines/AddRoutinePage'
 import { MakeRoutinePage } from '@pages/dashboard/routines/makeRoutine/MakeRoutinePage'
 import { RoutineListPage } from '@pages/dashboard/routines/selectRoutine/RoutineListPage'
@@ -69,11 +70,11 @@ const router = createBrowserRouter([
               },
               {
                 path: 'dashboard/progress',
-                element: <DashboardPlaceholderPage title="Progress" />,
+                element: <ProgressPage />,
               },
               {
                 path: 'dashboard/records',
-                element: <DashboardPlaceholderPage title="Records" />,
+                element: <RecordsPage />,
               },
               {
                 path: 'dashboard/settings',
