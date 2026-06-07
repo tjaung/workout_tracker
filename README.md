@@ -15,6 +15,8 @@ docker compose up --build
 - Server: http://localhost:8000
 - Postgres: localhost:5432
 
+On startup it seeds data. There is a test user with mock data. Login with username: test password: test to view a sample user
+
 ## About
 
 This is a workout tracker app complete with adding routines, starting workouts from them or making one off workouts, tracking body measurements, and analytics for body comp, exercise progress, workouts, and records.
