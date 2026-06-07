@@ -1,6 +1,5 @@
 import { Ban, Check, Info, Plus, Trash2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import type { ReactNode } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { type ExerciseModel } from '@api/exercises/exercise'
 import { userSettingsApi } from '@api/users'
@@ -12,13 +11,17 @@ import {
 } from '@api/workouts'
 import type { SessionExerciseStatusPayload } from '@api/workouts/session_exercise_status'
 import { BackButton } from '@components/ui/back-button'
+import { Badge } from '@components/ui/badge'
 import { Button } from '@components/ui/button'
 import { Card, CardContent } from '@components/ui/card'
-import { Input } from '@components/ui/input'
+import { DetailBlock } from '@components/ui/detail-block'
+import { NumberField, TextField } from '@components/ui/forms'
 import { Loading } from '@components/ui/loading'
 import { useDrawer } from '@hooks/drawer/useDrawer'
 import { useModal } from '@hooks/modal/useModal'
 import { ExerciseDrawerContent } from '@pages/dashboard/routines/makeRoutine/ExerciseDrawerContent'
+import { formatTimer } from '@utils/datetime'
+import { parseOptionalInteger, parseOptionalNumber } from '@utils/helpers/helpers'
 
 type WorkoutExerciseDraft = {
   draftId: string
@@ -261,12 +264,12 @@ export function CurrentWorkoutPage() {
               </p>
             </div>
             <div className="flex flex-wrap gap-2 text-xs font-medium text-muted">
-              <InfoPill>{source === 'empty' ? 'Empty' : 'In progress'}</InfoPill>
-              <InfoPill>Workout {formatTimer(workoutElapsedSeconds)}</InfoPill>
-              <InfoPill>{exercises.length} exercises</InfoPill>
-              <InfoPill>{completedExerciseCount} complete</InfoPill>
-              <InfoPill>{partialExerciseCount} partial</InfoPill>
-              <InfoPill>{skippedExerciseCount} skipped</InfoPill>
+              <Badge>{source === 'empty' ? 'Empty' : 'In progress'}</Badge>
+              <Badge>Workout {formatTimer(workoutElapsedSeconds)}</Badge>
+              <Badge>{exercises.length} exercises</Badge>
+              <Badge>{completedExerciseCount} complete</Badge>
+              <Badge>{partialExerciseCount} partial</Badge>
+              <Badge>{skippedExerciseCount} skipped</Badge>
             </div>
           </div>
           <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -353,8 +356,8 @@ function WorkoutExerciseCard({
           <div>
             <div className="flex flex-wrap items-center gap-2">
               <h2 className="text-xl font-semibold">{exercise.name}</h2>
-              {exercise.isAdditional ? <InfoPill>Additional</InfoPill> : null}
-              <InfoPill>{formatExerciseStatus(exercise.status)}</InfoPill>
+              {exercise.isAdditional ? <Badge>Additional</Badge> : null}
+              <Badge>{formatExerciseStatus(exercise.status)}</Badge>
             </div>
             <p className="mt-1 text-sm text-muted">{formatExerciseType(exercise.exerciseType)}</p>
           </div>
@@ -433,23 +436,23 @@ function SetRow({
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         {mode === 'strength' ? (
           <>
-            <NumberInput label="Reps" onChange={(value) => onChange({ reps: value })} value={set.reps} />
-            <NumberInput label="Weight" onChange={(value) => onChange({ weight: value })} value={set.weight} />
+            <NumberField label="Reps" onChange={(value) => onChange({ reps: value })} value={set.reps} />
+            <NumberField label="Weight" onChange={(value) => onChange({ weight: value })} value={set.weight} />
           </>
         ) : null}
         {mode === 'cardio' ? (
           <>
-            <NumberInput label="Duration sec" onChange={(value) => onChange({ durationSeconds: value })} value={set.durationSeconds} />
-            <NumberInput label="Distance" onChange={(value) => onChange({ distance: value })} value={set.distance} />
+            <NumberField label="Duration sec" onChange={(value) => onChange({ durationSeconds: value })} value={set.durationSeconds} />
+            <NumberField label="Distance" onChange={(value) => onChange({ distance: value })} value={set.distance} />
           </>
         ) : null}
         {mode === 'mobility' ? (
           <>
-            <NumberInput label="Duration sec" onChange={(value) => onChange({ durationSeconds: value })} value={set.durationSeconds} />
-            <TextInput label="Intensity" onChange={(value) => onChange({ intensity: value })} value={set.intensity} />
+            <NumberField label="Duration sec" onChange={(value) => onChange({ durationSeconds: value })} value={set.durationSeconds} />
+            <TextField label="Intensity" onChange={(value) => onChange({ intensity: value })} value={set.intensity} />
           </>
         ) : null}
-        <TextInput label="Notes" onChange={(value) => onChange({ notes: value })} value={set.notes} />
+        <TextField label="Notes" onChange={(value) => onChange({ notes: value })} value={set.notes} />
       </div>
       <Button aria-label="Remove set" onClick={onRemove} size="sm" variant="ghost">
         <Trash2 aria-hidden="true" className="h-4 w-4" />
@@ -461,38 +464,11 @@ function SetRow({
 function ExerciseInfo({ exercise }: { exercise: WorkoutExerciseDraft }) {
   return (
     <div className="space-y-5 pt-5 text-sm text-muted">
-      <InfoBlock label="Type" value={formatExerciseType(exercise.exerciseType)} />
-      <InfoBlock label="Equipment" value={exercise.equipment} />
-      <InfoBlock label="Preparation" value={exercise.preparation} />
-      <InfoBlock label="Execution" value={exercise.execution} />
+      <DetailBlock as="section" label="Type" value={formatExerciseType(exercise.exerciseType)} />
+      <DetailBlock as="section" label="Equipment" value={exercise.equipment} />
+      <DetailBlock as="section" label="Preparation" value={exercise.preparation} />
+      <DetailBlock as="section" label="Execution" value={exercise.execution} />
     </div>
-  )
-}
-
-function InfoBlock({ label, value }: { label: string; value: string | null }) {
-  return (
-    <section>
-      <h3 className="text-xs font-semibold uppercase tracking-[0.14em] text-tertiary">{label}</h3>
-      <p className="mt-1 leading-6">{value?.trim() || 'No details available.'}</p>
-    </section>
-  )
-}
-
-function NumberInput({ label, onChange, value }: { label: string; onChange: (value: string) => void; value: string }) {
-  return (
-    <label className="flex flex-col gap-2">
-      <span className="text-xs font-medium uppercase tracking-[0.16em] text-tertiary">{label}</span>
-      <Input min="0" onChange={(event) => onChange(event.target.value)} type="number" value={value} />
-    </label>
-  )
-}
-
-function TextInput({ label, onChange, value }: { label: string; onChange: (value: string) => void; value: string }) {
-  return (
-    <label className="flex flex-col gap-2">
-      <span className="text-xs font-medium uppercase tracking-[0.16em] text-tertiary">{label}</span>
-      <Input onChange={(event) => onChange(event.target.value)} value={value} />
-    </label>
   )
 }
 
@@ -577,16 +553,6 @@ function buildCompletePayload(exercises: WorkoutExerciseDraft[]): CompleteWorkou
   }
 }
 
-function parseOptionalInteger(value: string) {
-  const parsed = Number.parseInt(value, 10)
-  return Number.isFinite(parsed) ? parsed : null
-}
-
-function parseOptionalNumber(value: string) {
-  const parsed = Number.parseFloat(value)
-  return Number.isFinite(parsed) ? parsed : null
-}
-
 function getInputMode(exerciseType: string) {
   if (exerciseType === 'CARDIO') {
     return 'cardio'
@@ -605,12 +571,6 @@ function formatExerciseStatus(status: SessionExerciseStatusPayload) {
   return status.replaceAll('_', ' ').toLowerCase()
 }
 
-function formatTimer(totalSeconds: number) {
-  const minutes = Math.floor(totalSeconds / 60)
-  const seconds = totalSeconds % 60
-  return `${minutes}:${seconds.toString().padStart(2, '0')}`
-}
-
 function getExerciseStatusClassName(status: SessionExerciseStatusPayload) {
   if (status === 'COMPLETED') {
     return 'border-primary bg-primary/10'
@@ -619,14 +579,6 @@ function getExerciseStatusClassName(status: SessionExerciseStatusPayload) {
     return 'border-tertiary bg-dust-grey/60'
   }
   return ''
-}
-
-function InfoPill({ children }: { children: ReactNode }) {
-  return (
-    <span className="rounded-md border border-border bg-alabaster-grey px-2 py-1">
-      {children}
-    </span>
-  )
 }
 
 function parseWorkoutSource(value: string | null): 'continue' | 'current' | 'empty' {

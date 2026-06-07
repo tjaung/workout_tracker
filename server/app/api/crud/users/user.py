@@ -14,6 +14,8 @@ class UserCRUD(CRUDBase[User, UserCreate, UserUpdate]):
             password_hash=hash_password(payload.password),
             first_name=payload.first_name,
             last_name=payload.last_name,
+            sex=payload.sex,
+            date_of_birth=payload.date_of_birth,
         )
         db.add(user)
         db.flush()

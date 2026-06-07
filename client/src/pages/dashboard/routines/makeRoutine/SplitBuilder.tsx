@@ -1,6 +1,7 @@
 import { ChevronDown, GripVertical, Plus, Trash2 } from 'lucide-react'
 import { useState } from 'react'
 import { Button } from '@components/ui/button'
+import { NumberField, SelectField } from '@components/ui/forms'
 import { Input } from '@components/ui/input'
 import { useDrawer } from '@hooks/drawer/useDrawer'
 import { cn } from '@lib/cn'
@@ -176,25 +177,13 @@ export function SplitBuilder({
                   />
                 </label>
 
-                <label className="mt-4 flex flex-col gap-2">
-                  <span className="text-xs font-medium uppercase tracking-[0.16em] text-tertiary">
-                    Day of week
-                  </span>
-                  <select
-                    className="h-10 w-full cursor-pointer rounded-md border border-border bg-surface px-3 text-sm text-foreground outline-none focus:border-primary focus:ring-2 focus:ring-primary/25"
-                    onChange={(event) => updateSplit(split.id, { dayOfWeek: event.target.value as DayOfWeekDraft })}
-                    value={split.dayOfWeek}
-                  >
-                    {dayOptions.map((option) => (
-                      <option
-                        key={option.value || 'none'}
-                        value={option.value}
-                      >
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
-                </label>
+                <SelectField
+                  className="mt-4"
+                  label="Day of week"
+                  onChange={(value) => updateSplit(split.id, { dayOfWeek: value as DayOfWeekDraft })}
+                  options={dayOptions}
+                  value={split.dayOfWeek}
+                />
 
                 <div className="mt-4">
                   <div className="flex items-center justify-between gap-3">
@@ -384,20 +373,16 @@ function PrescriptionFields({
         placeholder="135"
         value={prescription.defaultWeightValue}
       />
-      <label className="flex flex-col gap-2">
-        <span className="text-xs font-medium uppercase tracking-[0.16em] text-tertiary">
-          Weight unit
-        </span>
-        <select
-          className="h-10 w-full rounded-md border border-border bg-surface px-3 text-sm text-foreground outline-none focus:border-primary focus:ring-2 focus:ring-primary/25"
-          onChange={(event) => onChange({ defaultWeightUnit: event.target.value as ExercisePrescriptionDraft['defaultWeightUnit'] })}
-          value={prescription.defaultWeightUnit}
-        >
-          <option value="LB">lb</option>
-          <option value="KG">kg</option>
-          <option value="PERCENT_1RM">% 1RM</option>
-        </select>
-      </label>
+      <SelectField
+        label="Weight unit"
+        onChange={(value) => onChange({ defaultWeightUnit: value as ExercisePrescriptionDraft['defaultWeightUnit'] })}
+        options={[
+          { label: 'lb', value: 'LB' },
+          { label: 'kg', value: 'KG' },
+          { label: '% 1RM', value: 'PERCENT_1RM' },
+        ]}
+        value={prescription.defaultWeightUnit}
+      />
       <NumberField
         label="Duration seconds"
         onChange={(value) => onChange({ defaultDurationSeconds: value })}
@@ -423,32 +408,5 @@ function PrescriptionFields({
         />
       </label>
     </div>
-  )
-}
-
-function NumberField({
-  label,
-  onChange,
-  placeholder,
-  value,
-}: {
-  label: string
-  onChange: (value: string) => void
-  placeholder: string
-  value: string
-}) {
-  return (
-    <label className="flex flex-col gap-2">
-      <span className="text-xs font-medium uppercase tracking-[0.16em] text-tertiary">
-        {label}
-      </span>
-      <Input
-        min="0"
-        onChange={(event) => onChange(event.target.value)}
-        placeholder={placeholder}
-        type="number"
-        value={value}
-      />
-    </label>
   )
 }

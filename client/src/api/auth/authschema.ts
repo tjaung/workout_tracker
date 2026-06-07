@@ -6,6 +6,8 @@ export const userSchema = z.object({
   email: z.string(),
   first_name: z.string(),
   last_name: z.string(),
+  sex: z.enum(['female', 'male']),
+  date_of_birth: z.string(),
   created_at: z.string(),
   last_login: z.string().nullable(),
 })
@@ -16,6 +18,8 @@ export const signupPayloadSchema = z.object({
   password: z.string().min(8).max(255),
   first_name: z.string().min(1).max(100),
   last_name: z.string().min(1).max(100),
+  sex: z.enum(['female', 'male']),
+  date_of_birth: z.string().min(1),
 })
 
 export const loginPayloadSchema = z.object({

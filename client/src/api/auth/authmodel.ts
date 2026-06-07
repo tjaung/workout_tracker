@@ -32,6 +32,14 @@ export class UserModel {
     return this.payload.last_name
   }
 
+  get sex() {
+    return this.payload.sex
+  }
+
+  get dateOfBirth() {
+    return this.payload.date_of_birth
+  }
+
   get createdAt() {
     return new Date(this.payload.created_at)
   }

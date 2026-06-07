@@ -8,7 +8,12 @@ from core.config import get_settings
 from core.database import Base, engine
 from core.logger import logger
 from services.schema_migrations import ensure_runtime_schema
-from services.seed_public_data import seed_default_user, seed_public_routines, seed_public_tables
+from services.seed_public_data import (
+    seed_default_user,
+    seed_public_routines,
+    seed_public_tables,
+    seed_test_user_history,
+)
 
 
 @asynccontextmanager
@@ -23,6 +28,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None]:
         seed_default_user()
         seed_public_tables()
         seed_public_routines()
+        seed_test_user_history()
 
     yield
 

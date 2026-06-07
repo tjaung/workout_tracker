@@ -1,4 +1,5 @@
 import type { RoutineFullCreatePayload } from '@api/programming/routine'
+import { parseOptionalInteger, parseOptionalNumber } from '@utils/helpers/helpers'
 import type { RoutineDraftGoal, RoutineDraftIntensity, RoutineDraftType, SplitDraft } from './types'
 
 export const steps = ['Name', 'Type', 'Goal', 'Splits', 'Intensity', 'Description', 'Start']
@@ -115,14 +116,4 @@ export function buildCreatePayload({
       })),
     start_now: startNow,
   }
-}
-
-function parseOptionalInteger(value: string) {
-  const parsed = Number.parseInt(value, 10)
-  return Number.isFinite(parsed) ? parsed : null
-}
-
-function parseOptionalNumber(value: string) {
-  const parsed = Number.parseFloat(value)
-  return Number.isFinite(parsed) ? parsed : null
 }

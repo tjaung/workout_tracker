@@ -34,7 +34,7 @@ function Modal() {
   return (
     <div
       className={[
-        'fixed inset-0 z-[140] flex items-center justify-center bg-[rgb(6_20_20_/_0.45)] p-3 sm:p-4 lg:p-6',
+        'fixed inset-0 z-[140] flex items-center justify-center bg-overlay p-3 sm:p-4 lg:p-6',
         isClosing ? 'modal-overlay-exit' : 'modal-overlay-enter',
       ].join(' ')}
       role="presentation"

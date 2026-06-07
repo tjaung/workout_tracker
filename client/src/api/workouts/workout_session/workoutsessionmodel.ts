@@ -303,6 +303,14 @@ export class WorkoutHistoryItemModel {
     return this.payload.start_time.slice(0, 10)
   }
 
+  get startTime() {
+    return this.payload.start_time
+  }
+
+  get endTime() {
+    return this.payload.end_time ?? null
+  }
+
   get displayStartDate() {
     return formatDate(this.payload.start_time)
   }
@@ -325,5 +333,31 @@ export class WorkoutHistoryItemModel {
 
   get setCount() {
     return this.payload.exercises.reduce((count, exercise) => count + exercise.sets.length, 0)
+  }
+
+  get durationMinutes() {
+    if (!this.payload.end_time) {
+      return null
+    }
+    const start = new Date(this.payload.start_time).getTime()
+    const end = new Date(this.payload.end_time).getTime()
+    if (!Number.isFinite(start) || !Number.isFinite(end) || end < start) {
+      return null
+    }
+    return Math.round((end - start) / 60000)
+  }
+
+  get displayDuration() {
+    if (this.durationMinutes === null) {
+      return 'unknown duration'
+    }
+    return `${this.durationMinutes} min`
+  }
+
+  get hoverSummary() {
+    const label = this.payload.routine_name
+      ? `${this.routineName} - ${this.splitName}`
+      : `Custom workout`
+    return `${label} for ${this.displayDuration} on ${this.displayStartDate}`
   }
 }

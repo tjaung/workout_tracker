@@ -6,6 +6,7 @@ import { Filter } from '@components/ui/filter'
 import { Loading } from '@components/ui/loading'
 import { Searchbar } from '@components/ui/searchbar'
 import { useDrawer } from '@hooks/drawer/useDrawer'
+import { makeOptions } from '@utils/helpers/helpers'
 import { ExerciseSelectCard } from './ExerciseSelectCard'
 
 export function ExerciseDrawerContent({
@@ -218,23 +219,4 @@ export function ExerciseDrawerContent({
       ) : null}
     </div>
   )
-}
-
-function makeOptions(
-  values: Array<{ label: string; value: string }>,
-  emptyLabel: string,
-) {
-  const seen = new Set<string>()
-  const options = values
-    .filter((option) => {
-      const normalizedValue = option.value.trim()
-      if (!normalizedValue || seen.has(normalizedValue)) {
-        return false
-      }
-      seen.add(normalizedValue)
-      return true
-    })
-    .sort((first, second) => first.label.localeCompare(second.label))
-
-  return [{ label: emptyLabel, value: '' }, ...options]
 }

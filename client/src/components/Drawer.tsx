@@ -82,7 +82,7 @@ function Drawer() {
   return (
     <div
       className={[
-        'fixed inset-0 z-[110] flex justify-end bg-[rgb(6_20_20_/_0.45)]',
+        'fixed inset-0 z-[110] flex justify-end bg-overlay',
         isClosing ? 'drawer-overlay-exit' : 'drawer-overlay-enter',
       ].join(' ')}
       role="presentation"

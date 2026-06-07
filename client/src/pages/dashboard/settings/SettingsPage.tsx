@@ -9,7 +9,7 @@ import {
 } from '@api/users'
 import { Button } from '@components/ui/button'
 import { Card, CardContent } from '@components/ui/card'
-import { Input } from '@components/ui/input'
+import { NumberField, SelectField, TextField } from '@components/ui/forms'
 import { Loading } from '@components/ui/loading'
 import { useAuth } from '@hooks/auth/useAuth'
 
@@ -26,6 +26,8 @@ export function SettingsPage() {
   const [lastName, setLastName] = useState(user?.lastName ?? '')
   const [username, setUsername] = useState(user?.username ?? '')
   const [email, setEmail] = useState(user?.email ?? '')
+  const [sex, setSex] = useState(user?.sex ?? 'male')
+  const [dateOfBirth, setDateOfBirth] = useState(user?.dateOfBirth ?? '')
   const [password, setPassword] = useState('')
 
   useEffect(() => {
@@ -59,6 +61,8 @@ export function SettingsPage() {
     setLastName(user?.lastName ?? '')
     setUsername(user?.username ?? '')
     setEmail(user?.email ?? '')
+    setSex(user?.sex ?? 'male')
+    setDateOfBirth(user?.dateOfBirth ?? '')
   }, [user])
 
   const updateSettings = async (payload: UserSettingsUpdatePayload) => {
@@ -83,8 +87,10 @@ export function SettingsPage() {
       await userAccountApi.update({
         email,
         first_name: firstName,
+        date_of_birth: dateOfBirth,
         last_name: lastName,
         password: password.trim() || undefined,
+        sex: sex as 'female' | 'male',
         username,
       })
       await refreshSession()
@@ -154,27 +160,24 @@ export function SettingsPage() {
               ]}
               value={settings?.unitSystem ?? 'imperial'}
             />
-            <label className="flex flex-col gap-2">
-              <span className="text-xs font-medium uppercase tracking-[0.16em] text-tertiary">Rest timer seconds</span>
-              <Input
-                max="600"
-                min="5"
-                onBlur={(event) => {
-                  const value = Number.parseInt(event.target.value, 10)
-                  if (Number.isFinite(value)) {
-                    void updateSettings({ workout_rest_timer_seconds: value })
-                  }
-                }}
-                type="number"
-                value={settings?.workoutRestTimerSeconds ?? 90}
-                onChange={(event) => {
-                  const value = Number.parseInt(event.target.value, 10)
-                  if (Number.isFinite(value)) {
-                    setSettings((current) => current ? newSettingsWithRestTimer(current, value) : current)
-                  }
-                }}
+            <NumberField
+              label="Rest timer seconds"
+              max="600"
+              min="5"
+              onBlur={(fieldValue) => {
+                const value = Number.parseInt(fieldValue, 10)
+                if (Number.isFinite(value)) {
+                  void updateSettings({ workout_rest_timer_seconds: value })
+                }
+              }}
+              onChange={(fieldValue) => {
+                const value = Number.parseInt(fieldValue, 10)
+                if (Number.isFinite(value)) {
+                  setSettings((current) => current ? newSettingsWithRestTimer(current, value) : current)
+                }
+              }}
+              value={settings?.workoutRestTimerSeconds ?? 90}
               />
-            </label>
           </div>
           {settingsMessage ? <p className="mt-4 text-sm font-medium text-muted">{settingsMessage}</p> : null}
         </CardContent>
@@ -191,6 +194,16 @@ export function SettingsPage() {
             <TextField label="Last name" onChange={setLastName} value={lastName} />
             <TextField label="Username" onChange={setUsername} value={username} />
             <TextField label="Email" onChange={setEmail} type="email" value={email} />
+            <SelectField
+              label="Sex"
+              onChange={(value) => setSex(value as 'female' | 'male')}
+              options={[
+                { label: 'Female', value: 'female' },
+                { label: 'Male', value: 'male' },
+              ]}
+              value={sex}
+            />
+            <TextField label="Date of birth" onChange={setDateOfBirth} type="date" value={dateOfBirth} />
             <TextField label="New password" onChange={setPassword} type="password" value={password} />
             <div className="flex items-end justify-end">
               <Button disabled={isSavingAccount} type="submit">
@@ -228,52 +241,6 @@ function SettingToggle({
         onChange={(event) => onChange(event.target.checked)}
         type="checkbox"
       />
-    </label>
-  )
-}
-
-function SelectField({
-  label,
-  onChange,
-  options,
-  value,
-}: {
-  label: string
-  onChange: (value: string) => void
-  options: { label: string; value: string }[]
-  value: string
-}) {
-  return (
-    <label className="flex flex-col gap-2">
-      <span className="text-xs font-medium uppercase tracking-[0.16em] text-tertiary">{label}</span>
-      <select
-        className="h-10 rounded-md border border-border bg-surface px-3 text-sm text-foreground outline-none focus:border-primary focus:ring-2 focus:ring-primary/25"
-        onChange={(event) => onChange(event.target.value)}
-        value={value}
-      >
-        {options.map((option) => (
-          <option key={option.value} value={option.value}>{option.label}</option>
-        ))}
-      </select>
-    </label>
-  )
-}
-
-function TextField({
-  label,
-  onChange,
-  type = 'text',
-  value,
-}: {
-  label: string
-  onChange: (value: string) => void
-  type?: string
-  value: string
-}) {
-  return (
-    <label className="flex flex-col gap-2">
-      <span className="text-xs font-medium uppercase tracking-[0.16em] text-tertiary">{label}</span>
-      <Input onChange={(event) => onChange(event.target.value)} type={type} value={value} />
     </label>
   )
 }

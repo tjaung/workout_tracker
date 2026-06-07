@@ -8,11 +8,14 @@ import {
 } from '@api/users'
 import { Button } from '@components/ui/button'
 import { Card, CardContent } from '@components/ui/card'
-import { Input } from '@components/ui/input'
+import { DateTimeField, NumberField, SelectField } from '@components/ui/forms'
+import { InfoItem } from '@components/ui/info-item'
 import { Loading } from '@components/ui/loading'
 import { useAuth } from '@hooks/auth/useAuth'
 import { useModal } from '@hooks/modal/useModal'
 import { CurrentWorkoutActions, CurrentWorkoutCard } from '@pages/dashboard/workouts/WorkoutsPage'
+import { toDateTimeLocalValue } from '@utils/datetime'
+import { parseNumber, parseOptionalNumber } from '@utils/helpers/helpers'
 import { cn } from '@lib/cn'
 import {
   type ActivityLevel,
@@ -134,7 +137,7 @@ function UserStatsCard({
               Current measurements and account basics.
             </p>
           </div>
-          <Button onClick={onLogMeasurement} size="sm" variant="outline">
+          <Button onClick={onLogMeasurement} size="md" variant="outline" className='text-xs py-2'>
             Log new measurements
           </Button>
         </div>
@@ -198,10 +201,7 @@ function MeasurementFormModal({
       {error ? <p className="text-sm font-medium text-danger">{error}</p> : null}
 
       <div className="grid gap-3 sm:grid-cols-2">
-        <label className="flex flex-col gap-2 sm:col-span-2">
-          <span className="text-xs font-medium uppercase tracking-[0.16em] text-tertiary">Measured at</span>
-          <Input onChange={(event) => setMeasuredAt(event.target.value)} type="datetime-local" value={measuredAt} />
-        </label>
+        <DateTimeField className="sm:col-span-2" label="Measured at" onChange={setMeasuredAt} value={measuredAt} />
         <NumberField label="Height cm" onChange={setHeightCm} value={heightCm} />
         <NumberField label="Weight kg" onChange={setWeightKg} value={weightKg} />
         <NumberField label="Body fat %" onChange={setBodyFatPercentage} value={bodyFatPercentage} />
@@ -300,17 +300,15 @@ function TdeeCalculator({ initialMeasurement }: { initialMeasurement: BodyMeasur
         </div>
 
         <div className="mt-5 grid gap-3 sm:grid-cols-2">
-          <label className="flex flex-col gap-2">
-            <span className="text-xs font-medium uppercase tracking-[0.16em] text-tertiary">Sex</span>
-            <select
-              className="h-10 rounded-md border border-border bg-surface px-3 text-sm text-foreground outline-none focus:border-primary focus:ring-2 focus:ring-primary/25"
-              onChange={(event) => setSex(event.target.value as BiologicalSex)}
-              value={sex}
-            >
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-            </select>
-          </label>
+          <SelectField
+            label="Sex"
+            onChange={(value) => setSex(value as BiologicalSex)}
+            options={[
+              { label: 'Male', value: 'male' },
+              { label: 'Female', value: 'female' },
+            ]}
+            value={sex}
+          />
           <NumberField label="Age" onChange={setAge} value={age} />
           <NumberField label="Height cm" onChange={setHeightCm} value={heightCm} />
           <NumberField label="Weight kg" onChange={setWeightKg} value={weightKg} />
@@ -331,23 +329,6 @@ function TdeeCalculator({ initialMeasurement }: { initialMeasurement: BodyMeasur
   )
 }
 
-function NumberField({
-  label,
-  onChange,
-  value,
-}: {
-  label: string
-  onChange: (value: string) => void
-  value: string
-}) {
-  return (
-    <label className="flex flex-col gap-2">
-      <span className="text-xs font-medium uppercase tracking-[0.16em] text-tertiary">{label}</span>
-      <Input min="0" onChange={(event) => onChange(event.target.value)} type="number" value={value} />
-    </label>
-  )
-}
-
 function TdeeRow({ label, strong = false, value }: { label: string; strong?: boolean; value: string }) {
   return (
     <tr className={strong ? 'bg-primary/10' : 'even:bg-alabaster-grey'}>
@@ -359,37 +340,10 @@ function TdeeRow({ label, strong = false, value }: { label: string; strong?: boo
   )
 }
 
-function InfoItem({ label, value }: { label: string; value?: string }) {
-  return (
-    <div className="rounded-md border border-border bg-alabaster-grey p-4">
-      <dt className="text-xs font-medium uppercase tracking-[0.16em] text-muted">{label}</dt>
-      <dd className="mt-1 text-base font-medium text-foreground">{value ?? '-'}</dd>
-    </div>
-  )
-}
-
 function getLatestMeasurement(measurements: BodyMeasurementModel[]) {
   return [...measurements].sort((left, right) => (
     right.toJSON().measured_at.localeCompare(left.toJSON().measured_at)
   ))[0] ?? null
-}
-
-function parseNumber(value: string) {
-  return Number.parseFloat(value)
-}
-
-function parseOptionalNumber(value: string) {
-  const parsed = Number.parseFloat(value)
-  return Number.isFinite(parsed) ? parsed : null
-}
-
-function toDateTimeLocalValue(value: string) {
-  const date = new Date(value)
-  if (Number.isNaN(date.getTime())) {
-    return ''
-  }
-  const offsetMs = date.getTimezoneOffset() * 60_000
-  return new Date(date.getTime() - offsetMs).toISOString().slice(0, 16)
 }
 
 function isValidTdeeInput(input: {

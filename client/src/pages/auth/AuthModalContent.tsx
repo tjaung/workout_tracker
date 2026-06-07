@@ -28,9 +28,11 @@ export function AuthModalContent({ mode }: AuthModalContentProps) {
       if (isSignup) {
         await signup({
           email: String(formData.get('email') ?? ''),
+          date_of_birth: String(formData.get('dateOfBirth') ?? ''),
           first_name: String(formData.get('firstName') ?? ''),
           last_name: String(formData.get('lastName') ?? ''),
           password: String(formData.get('password') ?? ''),
+          sex: String(formData.get('sex') ?? '') as 'female' | 'male',
           username: String(formData.get('username') ?? ''),
         })
       } else {
@@ -64,10 +66,30 @@ export function AuthModalContent({ mode }: AuthModalContentProps) {
       ) : null}
 
       {isSignup ? (
-        <label className="block space-y-1.5 text-sm font-medium text-foreground">
-          Email
-          <Input name="email" type="email" autoComplete="email" required />
-        </label>
+        <>
+          <label className="block space-y-1.5 text-sm font-medium text-foreground">
+            Email
+            <Input name="email" type="email" autoComplete="email" required />
+          </label>
+          <div className="grid gap-3 sm:grid-cols-2">
+            <label className="space-y-1.5 text-sm font-medium text-foreground">
+              Date of birth
+              <Input name="dateOfBirth" type="date" required />
+            </label>
+            <label className="space-y-1.5 text-sm font-medium text-foreground">
+              Sex
+              <select
+                className="h-10 w-full cursor-pointer rounded-md border border-border bg-surface px-3 text-sm text-foreground outline-none focus:border-primary focus:ring-2 focus:ring-primary/25"
+                name="sex"
+                required
+              >
+                <option value="">Select</option>
+                <option value="female">Female</option>
+                <option value="male">Male</option>
+              </select>
+            </label>
+          </div>
+        </>
       ) : null}
 
       <label className="block space-y-1.5 text-sm font-medium text-foreground">
