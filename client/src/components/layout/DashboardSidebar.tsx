@@ -22,7 +22,7 @@ export function DashboardSidebar({ collapsed, onToggle }: DashboardSidebarProps)
         </div>
         <Button
           aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-          className="h-9 w-9 shrink-0 p-0"
+          className="h-12 w-12 shrink-0 p-0"
           size="sm"
           variant="ghost"
           onClick={onToggle}

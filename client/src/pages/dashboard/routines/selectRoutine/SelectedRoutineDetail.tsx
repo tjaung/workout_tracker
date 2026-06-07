@@ -36,7 +36,7 @@ export function SelectedRoutineDetail({
         <div className="flex gap-2">
           <Button
             onClick={() => onEdit(routineToBuilderDraft(routine))}
-            variant="outline"
+            variant="secondary"
           >
             Edit routine
           </Button>
@@ -97,7 +97,7 @@ export function SelectedRoutineDetail({
       <footer className="flex items-center justify-between gap-3">
         <Button
           onClick={onBack}
-          variant="outline"
+          variant="secondary"
         >
           Back
         </Button>

@@ -19,12 +19,17 @@ SESSION_EXERCISE_METADATA_COLUMNS = {
     "status": "VARCHAR(20) DEFAULT 'PARTIAL'",
 }
 
+BODY_MEASUREMENT_METADATA_COLUMNS = {
+    "is_current": "BOOLEAN DEFAULT FALSE",
+}
+
 
 def ensure_runtime_schema() -> None:
     inspector = inspect(engine)
     _ensure_columns(inspector, "routines", ROUTINE_METADATA_COLUMNS)
     _ensure_columns(inspector, "routine_splits", ROUTINE_SPLIT_METADATA_COLUMNS)
     _ensure_columns(inspector, "session_exercises", SESSION_EXERCISE_METADATA_COLUMNS)
+    _ensure_columns(inspector, "body_measurements", BODY_MEASUREMENT_METADATA_COLUMNS)
 
 
 def _ensure_columns(inspector, table_name: str, expected_columns: dict[str, str]) -> None:

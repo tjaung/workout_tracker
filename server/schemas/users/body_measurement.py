@@ -8,11 +8,16 @@ class BodyMeasurementBase(BaseModel):
     height_cm: float | None = None
     weight_kg: float | None = None
     body_fat_percentage: float | None = None
+    is_current: bool = False
     notes: str | None = Field(default=None, max_length=500)
 
 
 class BodyMeasurementCreate(BodyMeasurementBase):
     user_id: int
+
+
+class CurrentBodyMeasurementCreate(BodyMeasurementBase):
+    pass
 
 
 class BodyMeasurementUpdate(BodyMeasurementBase):

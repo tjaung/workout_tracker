@@ -32,6 +32,10 @@ export class BodyMeasurementModel {
     return formatNumber(this.payload.body_fat_percentage, '%')
   }
 
+  get isCurrent() {
+    return this.payload.is_current ?? false
+  }
+
   toJSON() {
     return this.payload
   }

@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import type { ReactNode } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { type ExerciseModel } from '@api/exercises/exercise'
+import { userSettingsApi } from '@api/users'
 import {
   currentWorkoutApi,
   type CompleteWorkoutPayload,
@@ -16,6 +17,7 @@ import { Card, CardContent } from '@components/ui/card'
 import { Input } from '@components/ui/input'
 import { Loading } from '@components/ui/loading'
 import { useDrawer } from '@hooks/drawer/useDrawer'
+import { useModal } from '@hooks/modal/useModal'
 import { ExerciseDrawerContent } from '@pages/dashboard/routines/makeRoutine/ExerciseDrawerContent'
 
 type WorkoutExerciseDraft = {
@@ -52,7 +54,12 @@ export function CurrentWorkoutPage() {
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [restTimerSeconds, setRestTimerSeconds] = useState(90)
+  const [restSecondsRemaining, setRestSecondsRemaining] = useState<number | null>(null)
+  const [workoutElapsedSeconds, setWorkoutElapsedSeconds] = useState(0)
+  const [workoutStartedAt, setWorkoutStartedAt] = useState<number | null>(null)
   const { openDrawer } = useDrawer()
+  const { closeModal, openModal } = useModal()
 
   useEffect(() => {
     let isMounted = true
@@ -68,6 +75,7 @@ export function CurrentWorkoutPage() {
         if (isMounted) {
           setCurrentWorkout(workout)
           setExercises(workout.exercises.map(exerciseToDraft))
+          setWorkoutStartedAt(Date.now())
         }
       })
       .catch((caughtError: unknown) => {
@@ -85,6 +93,60 @@ export function CurrentWorkoutPage() {
       isMounted = false
     }
   }, [source])
+
+  useEffect(() => {
+    let isMounted = true
+
+    userSettingsApi
+      .get()
+      .then((settings) => {
+        if (isMounted) {
+          setRestTimerSeconds(settings.workoutRestTimerSeconds)
+        }
+      })
+      .catch(() => {
+        if (isMounted) {
+          setRestTimerSeconds(90)
+        }
+      })
+
+    return () => {
+      isMounted = false
+    }
+  }, [])
+
+  useEffect(() => {
+    if (workoutStartedAt === null) {
+      return undefined
+    }
+
+    const interval = window.setInterval(() => {
+      setWorkoutElapsedSeconds(Math.max(0, Math.floor((Date.now() - workoutStartedAt) / 1000)))
+    }, 1000)
+
+    return () => window.clearInterval(interval)
+  }, [workoutStartedAt])
+
+  useEffect(() => {
+    if (restSecondsRemaining === null) {
+      return undefined
+    }
+
+    if (restSecondsRemaining <= 0) {
+      setRestSecondsRemaining(null)
+      openModal(
+        <RestTimerCompleteModal onClose={closeModal} />,
+        { title: 'Rest time is over' },
+      )
+      return undefined
+    }
+
+    const timeout = window.setTimeout(() => {
+      setRestSecondsRemaining((current) => (current === null ? null : current - 1))
+    }, 1000)
+
+    return () => window.clearTimeout(timeout)
+  }, [closeModal, openModal, restSecondsRemaining])
 
   const completedExerciseCount = exercises.filter((exercise) => exercise.status === 'COMPLETED').length
   const partialExerciseCount = exercises.filter((exercise) => exercise.status === 'PARTIAL').length
@@ -200,11 +262,22 @@ export function CurrentWorkoutPage() {
             </div>
             <div className="flex flex-wrap gap-2 text-xs font-medium text-muted">
               <InfoPill>{source === 'empty' ? 'Empty' : 'In progress'}</InfoPill>
+              <InfoPill>Workout {formatTimer(workoutElapsedSeconds)}</InfoPill>
               <InfoPill>{exercises.length} exercises</InfoPill>
               <InfoPill>{completedExerciseCount} complete</InfoPill>
               <InfoPill>{partialExerciseCount} partial</InfoPill>
               <InfoPill>{skippedExerciseCount} skipped</InfoPill>
             </div>
+          </div>
+          <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-sm font-medium text-muted">
+              {restSecondsRemaining === null
+                ? `Rest timer ready: ${formatTimer(restTimerSeconds)}`
+                : `Rest remaining: ${formatTimer(restSecondsRemaining)}`}
+            </p>
+            <Button onClick={() => setRestSecondsRemaining(restTimerSeconds)} variant="outline">
+              Start rest timer
+            </Button>
           </div>
         </CardContent>
       </Card>
@@ -225,7 +298,7 @@ export function CurrentWorkoutPage() {
         <Button
           className="w-full"
           onClick={openAddExerciseDrawer}
-          variant="outline"
+          variant="secondary"
         >
           <Plus aria-hidden="true" className="h-4 w-4" />
           Add exercise
@@ -239,6 +312,19 @@ export function CurrentWorkoutPage() {
       >
         {isSubmitting ? 'Completing...' : 'Complete workout'}
       </Button>
+    </div>
+  )
+}
+
+function RestTimerCompleteModal({ onClose }: { onClose: () => void }) {
+  return (
+    <div className="space-y-5">
+      <p className="text-muted">
+        Rest time is over. Start the next set when you are ready.
+      </p>
+      <div className="flex justify-end">
+        <Button onClick={onClose}>Got it</Button>
+      </div>
     </div>
   )
 }
@@ -276,7 +362,7 @@ function WorkoutExerciseCard({
             aria-label="Exercise info"
             onClick={onInfo}
             size="sm"
-            variant="outline"
+            variant="secondary"
           >
             <Info aria-hidden="true" className="h-4 w-4" />
           </Button>
@@ -298,12 +384,12 @@ function WorkoutExerciseCard({
             </div>
 
             <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-              <Button onClick={onAddSet} variant="outline">
+              <Button onClick={onAddSet} variant="secondary">
                 <Plus aria-hidden="true" className="h-4 w-4" />
                 Add set
               </Button>
               <div className="flex flex-col gap-2 sm:flex-row">
-                <Button onClick={() => onStatusChange('SKIPPED')} variant="outline">
+                <Button onClick={() => onStatusChange('SKIPPED')} variant="secondary">
                   <Ban aria-hidden="true" className="h-4 w-4" />
                   Skip exercise
                 </Button>
@@ -316,7 +402,7 @@ function WorkoutExerciseCard({
           </>
         ) : (
           <div className="mt-5 flex justify-end">
-            <Button onClick={() => onStatusChange('PARTIAL')} variant="outline">
+            <Button onClick={() => onStatusChange('PARTIAL')} variant="secondary">
               Edit exercise
             </Button>
           </div>
@@ -517,6 +603,12 @@ function formatExerciseType(exerciseType: string) {
 
 function formatExerciseStatus(status: SessionExerciseStatusPayload) {
   return status.replaceAll('_', ' ').toLowerCase()
+}
+
+function formatTimer(totalSeconds: number) {
+  const minutes = Math.floor(totalSeconds / 60)
+  const seconds = totalSeconds % 60
+  return `${minutes}:${seconds.toString().padStart(2, '0')}`
 }
 
 function getExerciseStatusClassName(status: SessionExerciseStatusPayload) {

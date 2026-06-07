@@ -7,6 +7,7 @@ import { AddRoutinePage } from '@pages/dashboard/routines/AddRoutinePage'
 import { MakeRoutinePage } from '@pages/dashboard/routines/makeRoutine/MakeRoutinePage'
 import { RoutineListPage } from '@pages/dashboard/routines/selectRoutine/RoutineListPage'
 import { RoutinesPage } from '@pages/dashboard/routines/RoutinesPage'
+import { SettingsPage } from '@pages/dashboard/settings/SettingsPage'
 import { CurrentWorkoutPage } from '@pages/dashboard/workouts/CurrentWorkoutPage'
 import { WorkoutsPage } from '@pages/dashboard/workouts/WorkoutsPage'
 import { ProtectedRoute } from '@routes/ProtectedRoute'
@@ -76,7 +77,7 @@ const router = createBrowserRouter([
               },
               {
                 path: 'dashboard/settings',
-                element: <DashboardPlaceholderPage title="Settings" />,
+                element: <SettingsPage />,
               },
             ],
           },

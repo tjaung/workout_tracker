@@ -88,31 +88,7 @@ export function WorkoutsPage() {
         onAddRoutine={() => navigate('/routines/add-routine')}
       />
 
-      {currentWorkout?.isInProgress ? (
-        <Button
-          onClick={() => navigate('/workouts/current-workout?source=continue')}
-          size="lg"
-        >
-          Continue current workout
-        </Button>
-      ) : (
-        <div className="grid gap-3 sm:grid-cols-2">
-          <Button
-            disabled={!currentWorkout?.hasWorkout}
-            onClick={() => navigate('/workouts/current-workout?source=current')}
-            size="lg"
-          >
-            Start current workout
-          </Button>
-          <Button
-            onClick={() => navigate('/workouts/current-workout?source=empty')}
-            size="lg"
-            variant="outline"
-          >
-            Start empty workout
-          </Button>
-        </div>
-      )}
+      <CurrentWorkoutActions currentWorkout={currentWorkout} />
 
       <section className="flex flex-col gap-4">
         <p className="text-sm font-medium uppercase tracking-[0.18em] text-tertiary">
@@ -151,7 +127,7 @@ export function WorkoutsPage() {
                     setRoutineFilter('')
                     setSplitFilter('')
                   }}
-                  variant="outline"
+                  variant="secondary"
                 >
                   Clear
                 </Button>
@@ -179,7 +155,7 @@ export function WorkoutsPage() {
   )
 }
 
-function CurrentWorkoutCard({
+export function CurrentWorkoutCard({
   currentWorkout,
   onAddRoutine,
 }: {
@@ -247,6 +223,40 @@ function CurrentWorkoutCard({
         </section>
       </CardContent>
     </Card>
+  )
+}
+
+export function CurrentWorkoutActions({ currentWorkout }: { currentWorkout: CurrentWorkoutModel | null }) {
+  const navigate = useNavigate()
+
+  if (currentWorkout?.isInProgress) {
+    return (
+      <Button
+        onClick={() => navigate('/workouts/current-workout?source=continue')}
+        size="lg"
+      >
+        Continue current workout
+      </Button>
+    )
+  }
+
+  return (
+    <div className="grid gap-3 sm:grid-cols-2">
+      <Button
+        disabled={!currentWorkout?.hasWorkout}
+        onClick={() => navigate('/workouts/current-workout?source=current')}
+        size="lg"
+      >
+        Start current workout
+      </Button>
+      <Button
+        onClick={() => navigate('/workouts/current-workout?source=empty')}
+        size="lg"
+        variant="secondary"
+      >
+        Start empty workout
+      </Button>
+    </div>
   )
 }
 

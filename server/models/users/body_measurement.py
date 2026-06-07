@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import DateTime, Float, ForeignKey, Text, func
+from sqlalchemy import Boolean, DateTime, Float, ForeignKey, Text, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from core.database import Base
@@ -15,6 +15,7 @@ class BodyMeasurement(Base):
     height_cm: Mapped[float | None] = mapped_column(Float)
     weight_kg: Mapped[float | None] = mapped_column(Float)
     body_fat_percentage: Mapped[float | None] = mapped_column(Float)
+    is_current: Mapped[bool] = mapped_column(Boolean, default=False, server_default="false")
     notes: Mapped[str | None] = mapped_column(Text)
 
     user: Mapped["User"] = relationship(back_populates="body_measurements")

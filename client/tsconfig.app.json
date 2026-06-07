@@ -15,7 +15,8 @@
       "@hooks/*": ["src/hooks/*"],
       "@lib/*": ["src/lib/*"],
       "@pages/*": ["src/pages/*"],
-      "@routes/*": ["src/routes/*"]
+      "@routes/*": ["src/routes/*"],
+      "@utils/*": ["src/utils/*"]
     },
 
     /* Bundler mode */

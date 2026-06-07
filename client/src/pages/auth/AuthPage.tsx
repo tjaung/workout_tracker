@@ -60,7 +60,7 @@ export function AuthPage() {
                 <Button
                   className="w-full"
                   size="lg"
-                  variant="outline"
+                  variant="secondary"
                   onClick={() =>
                     openModal(<AuthModalContent mode="signin" />, {
                       title: 'Sign in',

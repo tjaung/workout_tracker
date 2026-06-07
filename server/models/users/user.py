@@ -22,6 +22,15 @@ class User(Base):
         back_populates="user",
         cascade="all, delete-orphan",
     )
+    settings: Mapped["UserSettings | None"] = relationship(
+        back_populates="user",
+        cascade="all, delete-orphan",
+        uselist=False,
+    )
+    settings_logs: Mapped[list["UserSettingsLog"]] = relationship(
+        back_populates="user",
+        cascade="all, delete-orphan",
+    )
     exercises: Mapped[list["Exercise"]] = relationship(back_populates="created_by_user")
     routines: Mapped[list["Routine"]] = relationship(back_populates="created_by_user")
     splits: Mapped[list["Split"]] = relationship(back_populates="created_by_user")
@@ -33,5 +42,7 @@ from models.exercises.exercise import Exercise
 from models.programming.routine import Routine
 from models.programming.split import Split
 from models.users.body_measurement import BodyMeasurement
+from models.users.user_settings import UserSettings
+from models.users.user_settings_log import UserSettingsLog
 from models.workouts.user_exercise_record import UserExerciseRecord
 from models.workouts.workout_session import WorkoutSession

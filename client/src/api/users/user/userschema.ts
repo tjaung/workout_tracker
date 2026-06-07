@@ -22,7 +22,9 @@ export const userCreateSchema = userSchema
   })
 
 export const userUpdateSchema = userCreateSchema.partial()
+export const userAccountUpdateSchema = userUpdateSchema
 
 export type UserPayload = z.infer<typeof userSchema>
 export type UserCreatePayload = z.infer<typeof userCreateSchema>
+export type UserAccountUpdatePayload = z.infer<typeof userAccountUpdateSchema>
 export type UserUpdatePayload = z.infer<typeof userUpdateSchema>
