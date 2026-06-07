@@ -4,7 +4,10 @@ This is an app that logs a user's workouts.
 
 ## How to start
 
+Clone this repo and go to the folder in terminal.
+
 ```sh
+git clone git@github.com:tjaung/workout_tracker.git && cd workout_tracker
 docker compose up --build
 ```
 
