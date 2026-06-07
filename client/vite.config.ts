@@ -6,6 +6,14 @@ import { fileURLToPath, URL } from 'node:url'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  server: {
+    allowedHosts: [
+      'localhost',
+      '127.0.0.1',
+      '10.0.0.197',
+      'workouttracker.shefslab.com',
+    ],
+  },
   resolve: {
     alias: {
       '@api': fileURLToPath(new URL('./src/api', import.meta.url)),
