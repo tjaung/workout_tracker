@@ -30,3 +30,11 @@ export function parseOptionalNumber(value: string) {
   const parsed = Number.parseFloat(value)
   return Number.isFinite(parsed) ? parsed : null
 }
+
+export function createId() {
+  if (globalThis.crypto?.randomUUID) {
+    return globalThis.crypto.randomUUID()
+  }
+
+  return `id-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`
+}

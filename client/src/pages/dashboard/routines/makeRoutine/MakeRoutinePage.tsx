@@ -8,6 +8,7 @@ import { Card, CardContent } from '@components/ui/card'
 import { Input } from '@components/ui/input'
 import { cn } from '@lib/cn'
 import { StartRoutinePrompt } from '@pages/dashboard/routines/StartRoutinePrompt'
+import { createId } from '@utils/helpers/helpers'
 import {
   buildCreatePayload,
   routineGoals,
@@ -61,7 +62,7 @@ export function MakeRoutinePage(props: MakeRoutinePageProps = {}) {
     {
       dayOfWeek: '',
       exercises: [],
-      id: crypto.randomUUID(),
+      id: createId(),
       name: '',
     },
   ])

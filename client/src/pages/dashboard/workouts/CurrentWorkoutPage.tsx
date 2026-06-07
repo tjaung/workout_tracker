@@ -21,7 +21,7 @@ import { useDrawer } from '@hooks/drawer/useDrawer'
 import { useModal } from '@hooks/modal/useModal'
 import { ExerciseDrawerContent } from '@pages/dashboard/routines/makeRoutine/ExerciseDrawerContent'
 import { formatTimer } from '@utils/datetime'
-import { parseOptionalInteger, parseOptionalNumber } from '@utils/helpers/helpers'
+import { createId, parseOptionalInteger, parseOptionalNumber } from '@utils/helpers/helpers'
 
 type WorkoutExerciseDraft = {
   draftId: string
@@ -475,7 +475,7 @@ function ExerciseInfo({ exercise }: { exercise: WorkoutExerciseDraft }) {
 function exerciseToDraft(exercise: CurrentWorkoutExerciseModel): WorkoutExerciseDraft {
   const setCount = exercise.defaultSets ?? 1
   return {
-    draftId: crypto.randomUUID(),
+    draftId: createId(),
     equipment: exercise.equipment ?? null,
     exerciseId: exercise.id,
     exerciseType: exercise.exerciseTypeValue,
@@ -492,7 +492,7 @@ function exerciseToDraft(exercise: CurrentWorkoutExerciseModel): WorkoutExercise
 
 function exerciseModelToDraft(exercise: ExerciseModel, order: number): WorkoutExerciseDraft {
   return {
-    draftId: crypto.randomUUID(),
+    draftId: createId(),
     equipment: exercise.equipment ?? null,
     exerciseId: exercise.id,
     exerciseType: exercise.exerciseTypeValue,
@@ -514,7 +514,7 @@ function suggestedSetDraft(exercise: CurrentWorkoutExerciseModel): WorkoutSetDra
     intensity: '',
     notes: '',
     reps: exercise.defaultReps?.toString() ?? '',
-    setId: crypto.randomUUID(),
+    setId: createId(),
     weight: exercise.defaultWeightValue?.toString() ?? '',
   }
 }
@@ -526,7 +526,7 @@ function emptySetDraft(): WorkoutSetDraft {
     intensity: '',
     notes: '',
     reps: '',
-    setId: crypto.randomUUID(),
+    setId: createId(),
     weight: '',
   }
 }

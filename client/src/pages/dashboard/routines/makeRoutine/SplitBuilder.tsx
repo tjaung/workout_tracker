@@ -5,6 +5,7 @@ import { NumberField, SelectField } from '@components/ui/forms'
 import { Input } from '@components/ui/input'
 import { useDrawer } from '@hooks/drawer/useDrawer'
 import { cn } from '@lib/cn'
+import { createId } from '@utils/helpers/helpers'
 import { ExerciseDrawerContent } from './ExerciseDrawerContent'
 import {
   dayOptions,
@@ -35,7 +36,7 @@ export function SplitBuilder({
   }
 
   const addSplit = () => {
-    const id = crypto.randomUUID()
+    const id = createId()
     onChange([
       ...splits,
       {
@@ -77,7 +78,7 @@ export function SplitBuilder({
             exercises: exercises.map((exercise) => {
               const existing = existingByExerciseId.get(exercise.id)
               return {
-                draftId: existing?.draftId ?? crypto.randomUUID(),
+                draftId: existing?.draftId ?? createId(),
                 exercise,
                 prescription: existing?.prescription ?? defaultPrescription(),
               }

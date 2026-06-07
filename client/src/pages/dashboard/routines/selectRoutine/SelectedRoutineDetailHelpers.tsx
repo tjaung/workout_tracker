@@ -2,6 +2,7 @@ import { ExerciseModel } from '@api/exercises/exercise'
 import type { RoutineDetailModel, RoutineFullCreatePayload } from '@api/programming/routine'
 import type { RoutineBuilderInitialDraft } from '@pages/dashboard/routines/addRoutine/RoutineBuilderWizard'
 import type { SplitDraft } from '@pages/dashboard/routines/makeRoutine/types'
+import { createId } from '@utils/helpers/helpers'
 
 export function buildPremadePayload(routine: RoutineDetailModel, startNow: boolean): RoutineFullCreatePayload {
   return {
@@ -42,7 +43,7 @@ export function routineToBuilderDraft(routine: RoutineDetailModel): RoutineBuild
     splits: routine.rawSplits.map((split): SplitDraft => ({
       dayOfWeek: (split.day_of_week ?? '') as SplitDraft['dayOfWeek'],
       exercises: split.split.split_exercises.map((exercise) => ({
-        draftId: crypto.randomUUID(),
+        draftId: createId(),
         exercise: new ExerciseModel({
           created_at: new Date().toISOString(),
           created_by_user_id: null,
@@ -64,7 +65,7 @@ export function routineToBuilderDraft(routine: RoutineDetailModel): RoutineBuild
           notes: exercise.notes ?? '',
         },
       })),
-      id: crypto.randomUUID(),
+      id: createId(),
       name: split.split.split_name,
     })),
     startNow: false,
