@@ -18,7 +18,7 @@ export function BackButton({
       className={`self-start ${className}`}
       onClick={onClick ?? (() => navigate(-1))}
       size="sm"
-      variant="outline"
+      variant="secondary"
     >
       <ArrowLeft
         aria-hidden="true"

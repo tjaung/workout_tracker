@@ -239,7 +239,7 @@ export function MakeRoutinePage(props: MakeRoutinePageProps = {}) {
             <Button
               disabled={(stepIndex === 0 && !onCancel) || isAnimating}
               onClick={stepIndex === 0 && onCancel ? onCancel : goBack}
-              variant="outline"
+              variant="secondary"
             >
               <ChevronLeft
                 aria-hidden="true"

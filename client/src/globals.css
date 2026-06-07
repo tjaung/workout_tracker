@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  color-scheme: light;
+  color-scheme: dark;
 
   --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
@@ -14,17 +14,17 @@
 
   --color-primary: var(--color-chartreuse);
   --color-primary-foreground: var(--color-ink-black);
-  --color-secondary: var(--color-ink-black);
-  --color-secondary-foreground: var(--color-alabaster-grey);
+  --color-secondary: var(--color-dust-grey);
+  --color-secondary-foreground: var(--color-ink-black);
   --color-tertiary: var(--color-grey-olive);
   --color-tertiary-foreground: var(--color-ink-black);
 
-  --color-background: var(--color-alabaster-grey);
-  --color-foreground: var(--color-ink-black);
-  --color-muted: var(--color-grey-olive);
-  --color-border: var(--color-dust-grey);
-  --color-surface: #ffffff;
-  --color-surface-muted: var(--color-dust-grey);
+  --color-background: var(--color-ink-black);
+  --color-foreground: var(--color-alabaster-grey);
+  --color-muted: var(--color-dust-grey);
+  --color-border: #263535;
+  --color-surface: #0d2020;
+  --color-surface-muted: #142b2b;
   --color-danger: #d7381e;
   --color-success: #3f7d20;
 
@@ -40,6 +40,98 @@
 
   --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.05);
   --shadow-md: 0 4px 12px rgb(0 0 0 / 0.08);
+}
+
+[data-theme="light"] {
+  color-scheme: light;
+
+  --color-secondary: var(--color-ink-black);
+  --color-secondary-foreground: var(--color-alabaster-grey);
+  --color-tertiary: var(--color-grey-olive);
+  --color-tertiary-foreground: var(--color-ink-black);
+
+  --color-background: var(--color-alabaster-grey);
+  --color-foreground: var(--color-ink-black);
+  --color-muted: var(--color-grey-olive);
+  --color-border: var(--color-dust-grey);
+  --color-surface: #ffffff;
+  --color-surface-muted: var(--color-dust-grey);
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --color-secondary: var(--color-dust-grey);
+  --color-secondary-foreground: var(--color-ink-black);
+  --color-tertiary: var(--color-grey-olive);
+  --color-tertiary-foreground: var(--color-ink-black);
+
+  --color-background: var(--color-ink-black);
+  --color-foreground: var(--color-alabaster-grey);
+  --color-muted: var(--color-dust-grey);
+  --color-border: #263535;
+  --color-surface: #0d2020;
+  --color-surface-muted: #142b2b;
+}
+
+[data-theme="dark"] .bg-alabaster-grey {
+  background-color: var(--color-surface-muted);
+}
+
+[data-theme="dark"] .bg-dust-grey\/60 {
+  background-color: color-mix(in srgb, var(--color-surface-muted) 60%, transparent);
+}
+
+[data-theme="dark"] .even\:bg-alabaster-grey:nth-child(even) {
+  background-color: var(--color-surface-muted);
+}
+
+@media (prefers-color-scheme: light) {
+  [data-theme="system"] {
+    color-scheme: light;
+
+    --color-secondary: var(--color-ink-black);
+    --color-secondary-foreground: var(--color-alabaster-grey);
+    --color-tertiary: var(--color-grey-olive);
+    --color-tertiary-foreground: var(--color-ink-black);
+
+    --color-background: var(--color-alabaster-grey);
+    --color-foreground: var(--color-ink-black);
+    --color-muted: var(--color-grey-olive);
+    --color-border: var(--color-dust-grey);
+    --color-surface: #ffffff;
+    --color-surface-muted: var(--color-dust-grey);
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  [data-theme="system"] {
+    color-scheme: dark;
+
+    --color-secondary: var(--color-dust-grey);
+    --color-secondary-foreground: var(--color-ink-black);
+    --color-tertiary: var(--color-grey-olive);
+    --color-tertiary-foreground: var(--color-ink-black);
+
+    --color-background: var(--color-ink-black);
+    --color-foreground: var(--color-alabaster-grey);
+    --color-muted: var(--color-dust-grey);
+    --color-border: #263535;
+    --color-surface: #0d2020;
+    --color-surface-muted: #142b2b;
+  }
+
+  [data-theme="system"] .bg-alabaster-grey {
+    background-color: var(--color-surface-muted);
+  }
+
+  [data-theme="system"] .bg-dust-grey\/60 {
+    background-color: color-mix(in srgb, var(--color-surface-muted) 60%, transparent);
+  }
+
+  [data-theme="system"] .even\:bg-alabaster-grey:nth-child(even) {
+    background-color: var(--color-surface-muted);
+  }
 }
 
 @theme inline {

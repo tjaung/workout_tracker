@@ -202,7 +202,7 @@ export function SplitBuilder({
                     <Button
                       onClick={() => openExerciseDrawer(split)}
                       size="sm"
-                      variant="outline"
+                      variant="secondary"
                     >
                       <Plus
                         aria-hidden="true"
@@ -228,7 +228,7 @@ export function SplitBuilder({
       <Button
         className="w-full"
         onClick={addSplit}
-        variant="outline"
+        variant="secondary"
       >
         <Plus
           aria-hidden="true"

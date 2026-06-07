@@ -15,6 +15,7 @@ export default defineConfig({
       '@lib': fileURLToPath(new URL('./src/lib', import.meta.url)),
       '@pages': fileURLToPath(new URL('./src/pages', import.meta.url)),
       '@routes': fileURLToPath(new URL('./src/routes', import.meta.url)),
+      '@utils': fileURLToPath(new URL('./src/utils', import.meta.url)),
     },
   },
 })

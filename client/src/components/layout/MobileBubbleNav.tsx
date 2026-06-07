@@ -17,7 +17,16 @@ const arcPositions = [
   '-translate-x-4 translate-y-28',
 ]
 
-export function MobileBubbleNav() {
+const leftArcPositions = [
+  'translate-x-20 -translate-y-24',
+  'translate-x-28 -translate-y-12',
+  'translate-x-28 translate-y-0',
+  'translate-x-24 translate-y-14',
+  'translate-x-14 translate-y-24',
+  'translate-x-4 translate-y-28',
+]
+
+export function MobileBubbleNav({ leftHanded = false }: { leftHanded?: boolean }) {
   const { logout, user } = useAuth()
   const [isOpen, setIsOpen] = useState(false)
   const [menuRendered, setMenuRendered] = useState(false)
@@ -64,7 +73,7 @@ export function MobileBubbleNav() {
   }
 
   return (
-    <div className="fixed right-4 top-1/2 z-50 md:hidden">
+    <div className={cn('fixed top-1/2 z-50 md:hidden', leftHanded ? 'left-4' : 'right-4')}>
       <div className="relative">
         {menuRendered ? (
           <>
@@ -78,7 +87,7 @@ export function MobileBubbleNav() {
               className={cn(
                 'absolute flex h-12 w-12 items-center justify-center rounded-full border border-border bg-surface text-foreground opacity-0 shadow-md transition-all duration-300 ease-out',
                 isOpen
-                  ? '-translate-x-10 -translate-y-36 scale-100 opacity-100'
+                  ? `${leftHanded ? 'translate-x-10' : '-translate-x-10'} -translate-y-36 scale-100 opacity-100`
                   : 'translate-x-0 translate-y-0 scale-50 pointer-events-none',
                 accountOpen && 'bg-primary text-primary-foreground',
               )}
@@ -89,7 +98,12 @@ export function MobileBubbleNav() {
             </button>
 
             {accountOpen ? (
-              <div className="absolute right-16 top-[-10rem] w-44 rounded-lg border border-border bg-surface p-2 shadow-md">
+              <div
+                className={cn(
+                  'absolute top-[-10rem] w-44 rounded-lg border border-border bg-surface p-2 shadow-md',
+                  leftHanded ? 'left-16' : 'right-16',
+                )}
+              >
                 <p className="truncate px-2 py-2 text-xs text-muted">{user?.displayName}</p>
                 <Button className="w-full justify-start" size="sm" variant="ghost" onClick={() => void logout()}>
                   <LogOut className="h-4 w-4" aria-hidden="true" />
@@ -102,6 +116,7 @@ export function MobileBubbleNav() {
               const Icon = item.icon
               const openDelay = (dashboardNavItems.length - 1 - index) * bubbleDelayMs
               const closeDelay = (index + 1) * bubbleDelayMs
+              const positions = leftHanded ? leftArcPositions : arcPositions
 
               return (
                 <Link
@@ -112,7 +127,7 @@ export function MobileBubbleNav() {
                   className={cn(
                     'absolute flex h-12 w-12 items-center justify-center rounded-full border border-border bg-surface text-foreground opacity-0 shadow-md transition-all duration-300 ease-out hover:bg-primary hover:text-primary-foreground',
                     isOpen
-                      ? `${arcPositions[index]} scale-100 opacity-100`
+                      ? `${positions[index]} scale-100 opacity-100`
                       : 'translate-x-0 translate-y-0 scale-50 pointer-events-none',
                   )}
                   key={item.href}
