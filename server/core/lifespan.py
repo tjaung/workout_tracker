@@ -3,7 +3,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 
-import models
+import models  # noqa: F401
 from core.config import get_settings
 from core.database import Base, engine
 from core.logger import logger
