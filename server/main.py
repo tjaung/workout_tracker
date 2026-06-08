@@ -24,7 +24,7 @@ app.include_router(api_router, prefix=f"{settings.api_prefix}/v1")
 
 @app.get("/")
 async def root() -> dict[str, str]:
-    return {"message": f"The {settings.app_name} is up and running"}
+    return {"message": f"The {settings.app_name} is up and running!"}
 
 
 @app.get(f"{settings.api_prefix}/health")
