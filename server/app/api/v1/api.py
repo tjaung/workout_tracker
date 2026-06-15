@@ -7,6 +7,7 @@ from app.api.v1.endpoints.exercises import (
     muscle_group_router,
     record_type_router,
 )
+from app.api.v1.endpoints.pentest import router as pentest_router
 from app.api.v1.endpoints.programming import (
     routine_router,
     routine_split_router,
@@ -39,6 +40,7 @@ api_router.include_router(routine_split_router)
 api_router.include_router(split_exercise_router)
 api_router.include_router(progress_router)
 api_router.include_router(records_router)
+api_router.include_router(pentest_router)
 api_router.include_router(workout_session_router)
 api_router.include_router(session_exercise_router)
 api_router.include_router(exercise_set_router)
