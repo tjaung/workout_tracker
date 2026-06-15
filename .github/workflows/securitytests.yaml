@@ -15,7 +15,7 @@ jobs:
       scanners: sast,pentest
       app_dockerfile: server/Dockerfile
       app_context: server
-      app_port: "3000"
+      app_port: "8000"
       app_health_path: /health
       pentest_target_paths: /api/v1/pentest/status,/api/v1/pentest/scan
     secrets:
