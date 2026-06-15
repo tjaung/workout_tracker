@@ -7,10 +7,13 @@ on:
 
 jobs:
   security-tests:
-    uses: tjaung/cs6620_project/.github/workflows/securitytests.yaml@tj/lambda
+    uses: tjaung/cs6620_project/.github/workflows/securitytests.yaml@tj/connect-all
     permissions:
       id-token: write
       contents: read
+    with:
+      scanners: sast,pentest
+      pentest_target_url: http://example.com/api/users
     secrets:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
